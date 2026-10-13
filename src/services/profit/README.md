@@ -1,3 +1,11 @@
-# Pelno skaičiavimo paslauga
+# Pelno skaičiavimo funkcijos
 
-TODO: pridėti gryną pelno skaičiavimo logiką be Supabase ar kitų duomenų bazės priklausomybių.
+`profit.js` pateikia grynas JavaScript funkcijas investicijų pelnui, pinigų srautui ir turimoms pozicijoms apskaičiuoti. Modulis neturi React, Supabase ar kitų išorinių priklausomybių.
+
+Sandoriai apdorojami pagal datą ir tada pagal ID. Realizuoto pelno savikaina skaičiuojama svertinio vidurkio metodu. Pinigų sumos perduodamos sveikais centais; pardavimas be pakankamo ankstesnių pirkimų kiekio laikomas klaida.
+
+- `calculateSellProfits` – kiekvieno pardavimo grynosios įplaukos, savikaina ir pelnas.
+- `calculateProfitBySymbol` – parduotas kiekis ir realizuotos sumos pagal simbolį.
+- `calculateTotalProfit` – bendras realizuotas pelnas.
+- `calculateCashSummary` – įnašai, pirkimai, grynosios pardavimo įplaukos, komisiniai ir pinigų likutis.
+- `calculateHoldings` – likusios pozicijos ir jų savikaina.
