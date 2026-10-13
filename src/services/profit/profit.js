@@ -85,7 +85,13 @@ const compute = (transactions) => {
   return { sales, holdings };
 };
 
-export const calculateSellProfits = (transactions) => compute(transactions).sales.map(({ soldQuantity, ...sale }) => sale);
+export const calculateSellProfits = (transactions) => compute(transactions).sales.map((sale) => ({
+  transactionId: sale.transactionId,
+  symbol: sale.symbol,
+  proceedsCents: sale.proceedsCents,
+  costCents: sale.costCents,
+  profitCents: sale.profitCents,
+}));
 
 export const calculateProfitBySymbol = (transactions) => {
   const totals = new Map();

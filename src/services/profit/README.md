@@ -4,7 +4,7 @@
 
 Sandoriai apdorojami pagal datą ir tada pagal ID. Realizuoto pelno savikaina skaičiuojama svertinio vidurkio metodu. Pinigų sumos perduodamos sveikais centais; pardavimas be pakankamo ankstesnių pirkimų kiekio laikomas klaida.
 
-- `calculateSellProfits` – kiekvieno pardavimo grynosios įplaukos, savikaina ir pelnas.
+- `calculateSellProfits` – kiekvieno pardavimo `{ transactionId, symbol, proceedsCents, costCents, profitCents }` rezultatas.
 - `calculateProfitBySymbol` – parduotas kiekis ir realizuotos sumos pagal simbolį.
 - `calculateTotalProfit` – bendras realizuotas pelnas.
 - `calculateCashSummary` – įnašai, pirkimai, grynosios pardavimo įplaukos, komisiniai ir pinigų likutis.

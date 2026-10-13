@@ -83,7 +83,7 @@ export function validatePortfolio(transactions) {
   for (const transaction of chronological(transactions)) {
     const inputResult = validateTransactionInput(transaction);
     if (!inputResult.valid) {
-      for (const [field, message] of Object.entries(inputResult.errors)) {
+      for (const message of Object.values(inputResult.errors)) {
         errors.push(`Sandoris ${transaction?.id ?? ''}: ${message}`.trim());
       }
       continue;

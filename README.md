@@ -1,11 +1,12 @@
 # Investicijų portfelis
 
-Pradinis React + Vite karkasas vieno vartotojo investicijų portfelio programai. Šiame etape nėra verslo logikos, ekranų ar duomenų bazės schemos.
+Vieno vartotojo investicijų portfelio programa, kurioje galima tvarkyti įnašus, akcijų pirkimus ir pardavimus. Sąsaja sukurta React ir Vite, o duomenys pasiekiami per Supabase.
 
 ## Reikalavimai
 
 - Node.js 18 arba naujesnė versija
 - npm
+- Supabase projektas su `stocks` ir `transactions` lentelėmis
 
 ## Įdiegimas ir paleidimas
 
@@ -20,28 +21,30 @@ VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-Paleiskite vietinę kūrimo aplinką:
+Paleiskite kūrimo aplinką:
 
 ```sh
 npm run dev
 ```
 
-Programa tik patikrina, ar Supabase klientą galima sukurti. Ji neatlieka užklausų į duomenų bazę.
+Sandorių puslapyje galima įrašyti įnašus, pirkimus ir pardavimus, peržiūrėti istoriją bei redaguoti arba ištrinti esamus įrašus. Prieš įrašymą tikrinama įvestis, pinigų likutis ir turimas akcijų kiekis.
 
 ## Komandos
 
 - `npm run dev` – paleidžia Vite kūrimo serverį.
 - `npm run build` – sukuria produkcinį build kataloge `dist/`.
-- `npm run test` – paleidžia Vitest pavyzdinį testą.
+- `npm run test` – paleidžia Vitest testus.
 - `npm run lint` – patikrina JavaScript kodą su ESLint.
 - `npm run format` – suformatuoja failus su Prettier.
 
 ## Aplankai
 
-- `src/api/` – būsimos funkcijos darbui su sandoriais.
-- `src/components/` ir `src/pages/` – būsimi bendri komponentai ir puslapiai.
-- `src/lib/` – išorinės bibliotekos, įskaitant Supabase klientą.
-- `src/services/profit/` – būsima nuo duomenų bazės nepriklausoma pelno skaičiavimo logika.
-- `src/utils/` – būsimos bendros pagalbinės funkcijos, įskaitant pinigų formatavimą.
-- `supabase/migrations/` – vėliau kuriamos SQL migracijos.
-- `docs/decisions.md` – dar nepriimtų apskaitos ir pinigų apdorojimo sprendimų šablonas.
+- `src/api/` – Supabase duomenų prieigos funkcijos ir laukų mapperiai.
+- `src/components/` – sandorių forma ir sąrašas.
+- `src/pages/` – sandorių puslapis.
+- `src/lib/` – Supabase klientas.
+- `src/services/profit/` – nuo duomenų bazės nepriklausoma pelno skaičiavimo logika.
+- `src/services/validation/` – įvesties, portfelio ir hipotetinių pakeitimų validavimas.
+- `src/utils/` – pinigų konvertavimo ir formatavimo funkcijos.
+- `supabase/migrations/` – duomenų bazės SQL migracijos.
+- `docs/decisions.md` – apskaitos ir pinigų apdorojimo sprendimai.
