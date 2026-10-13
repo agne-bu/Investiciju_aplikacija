@@ -4,7 +4,7 @@ import TransactionForm from '../components/TransactionForm.jsx';
 import TransactionList from '../components/TransactionList.jsx';
 import { canDeleteTransaction } from '../services/validation/transactionValidation.js';
 
-export default function TransactionsPage() {
+export default function TransactionsPage({ onTransactionsChanged }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
@@ -42,6 +42,7 @@ export default function TransactionsPage() {
     try {
       await deleteTransaction(transaction.id);
       if (editingTransaction?.id === transaction.id) setEditingTransaction(null);
+      onTransactionsChanged?.();
       setReloadKey((key) => key + 1);
     } catch (error) {
       setActionError(error instanceof Error ? error.message : 'Nepavyko ištrinti sandorio.');
@@ -53,6 +54,7 @@ export default function TransactionsPage() {
   const handleSaved = () => {
     setEditingTransaction(null);
     setActionError('');
+    onTransactionsChanged?.();
     setReloadKey((key) => key + 1);
   };
 

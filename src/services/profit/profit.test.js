@@ -71,6 +71,18 @@ describe('profit calculations using weighted average cost', () => {
     expect(bySymbol.reduce((sum, row) => sum + row.profitCents, 0)).toBe(calculateTotalProfit(transactions));
   });
 
+  it('keeps total portfolio profit equal to the sum of per-symbol profits', () => {
+    const transactions = [
+      buy(1, '2026-01-01', 'AAA', 2, 1_000),
+      sell(2, '2026-01-02', 'AAA', 1, 1_300),
+      buy(3, '2026-01-01', 'BBB', 1, 500),
+      sell(4, '2026-01-03', 'BBB', 1, 400),
+    ];
+    const perSymbolProfit = calculateProfitBySymbol(transactions)
+      .reduce((sum, row) => sum + row.profitCents, 0);
+    expect(calculateTotalProfit(transactions)).toBe(perSymbolProfit);
+  });
+
   it('does not tie realized profit to reused cash', () => {
     const transactions = [
       buy(1, '2026-01-01', 'ABC', 1, 1_000), sell(2, '2026-01-02', 'ABC', 1, 1_200),

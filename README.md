@@ -27,7 +27,7 @@ Paleiskite kūrimo aplinką:
 npm run dev
 ```
 
-Sandorių puslapyje galima įrašyti įnašus, pirkimus ir pardavimus, peržiūrėti istoriją bei redaguoti arba ištrinti esamus įrašus. Prieš įrašymą tikrinama įvestis, pinigų likutis ir turimas akcijų kiekis.
+Sandorių puslapyje galima įrašyti įnašus, pirkimus ir pardavimus, peržiūrėti istoriją bei redaguoti arba ištrinti esamus įrašus. Prieš įrašymą tikrinama įvestis, pinigų likutis ir turimas akcijų kiekis. Suvestinės puslapyje pateikiami pinigų srautai ir realizuotas pelnas pagal akciją bei visam portfeliui.
 
 ## Komandos
 
@@ -40,8 +40,8 @@ Sandorių puslapyje galima įrašyti įnašus, pirkimus ir pardavimus, peržiūr
 ## Aplankai
 
 - `src/api/` – Supabase duomenų prieigos funkcijos ir laukų mapperiai.
-- `src/components/` – sandorių forma ir sąrašas.
-- `src/pages/` – sandorių puslapis.
+- `src/components/` – sandorių forma ir sąrašas su pardavimų pelnu.
+- `src/pages/` – sandorių ir suvestinės puslapiai.
 - `src/lib/` – Supabase klientas.
 - `src/services/profit/` – nuo duomenų bazės nepriklausoma pelno skaičiavimo logika.
 - `src/services/validation/` – įvesties, portfelio ir hipotetinių pakeitimų validavimas.

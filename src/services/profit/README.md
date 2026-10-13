@@ -9,3 +9,5 @@ Sandoriai apdorojami pagal datą ir tada pagal ID. Realizuoto pelno savikaina sk
 - `calculateTotalProfit` – bendras realizuotas pelnas.
 - `calculateCashSummary` – įnašai, pirkimai, grynosios pardavimo įplaukos, komisiniai ir pinigų likutis.
 - `calculateHoldings` – likusios pozicijos ir jų savikaina.
+
+Testai taip pat tikrina, kad bendras realizuotas pelnas sutaptų su pelnų pagal akciją suma.
