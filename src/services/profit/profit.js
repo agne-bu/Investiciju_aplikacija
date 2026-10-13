@@ -55,10 +55,18 @@ const compute = (transactions) => {
       throw new RangeError('Trade quantity and price must be positive, and fee non-negative');
     }
 
-    const position = holdings.get(symbol) ?? { quantity: 0n, totalCostCents: 0n };
+    const position = holdings.get(symbol) ?? { quantity: 0n, totalCostCents: 0n, purchases: [] };
     if (transaction.type === 'buy') {
       position.quantity += quantity;
       position.totalCostCents += quantity * price + fee;
+      position.purchases.push({
+        transactionId: transaction.id,
+        date: transaction.date,
+        quantity: asSafeNumber(quantity, 'quantity'),
+        priceCents: asSafeNumber(price, 'priceCents'),
+        feeCents: asSafeNumber(fee, 'feeCents'),
+        amountCents: asSafeNumber(quantity * price + fee, 'amountCents'),
+      });
       holdings.set(symbol, position);
       continue;
     }
@@ -73,12 +81,20 @@ const compute = (transactions) => {
     sales.push({
       transactionId: transaction.id,
       symbol,
+      date: transaction.date,
+      quantity: asSafeNumber(quantity, 'quantity'),
+      priceCents: asSafeNumber(price, 'priceCents'),
+      feeCents: asSafeNumber(fee, 'feeCents'),
       soldQuantity: asSafeNumber(quantity, 'soldQuantity'),
       proceedsCents: asSafeNumber(proceeds, 'proceedsCents'),
       costCents: asSafeNumber(cost, 'costCents'),
       profitCents: asSafeNumber(proceeds - cost, 'profitCents'),
+      purchaseTransactions: position.purchases.map((purchase) => ({ ...purchase })),
     });
-    if (position.quantity === 0n) position.totalCostCents = 0n;
+    if (position.quantity === 0n) {
+      position.totalCostCents = 0n;
+      position.purchases = [];
+    }
     holdings.set(symbol, position);
   }
 
@@ -91,6 +107,19 @@ export const calculateSellProfits = (transactions) => compute(transactions).sale
   proceedsCents: sale.proceedsCents,
   costCents: sale.costCents,
   profitCents: sale.profitCents,
+}));
+
+export const calculateSellDetails = (transactions) => compute(transactions).sales.map((sale) => ({
+  transactionId: sale.transactionId,
+  symbol: sale.symbol,
+  date: sale.date,
+  quantity: sale.quantity,
+  priceCents: sale.priceCents,
+  feeCents: sale.feeCents,
+  proceedsCents: sale.proceedsCents,
+  costCents: sale.costCents,
+  profitCents: sale.profitCents,
+  purchaseTransactions: sale.purchaseTransactions,
 }));
 
 export const calculateProfitBySymbol = (transactions) => {

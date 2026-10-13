@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { listTransactions } from '../api/transactions.js';
 import {
   calculateCashSummary,
   calculateHoldings,
   calculateProfitBySymbol,
+  calculateSellDetails,
   calculateTotalProfit,
 } from '../services/profit/profit.js';
 import { formatCents } from '../utils/money.js';
@@ -13,6 +14,7 @@ export default function SummaryPage({ transactionRevision = 0 }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [retryKey, setRetryKey] = useState(0);
+  const [expandedSymbols, setExpandedSymbols] = useState(() => new Set());
 
   useEffect(() => {
     let active = true;
@@ -55,6 +57,12 @@ export default function SummaryPage({ transactionRevision = 0 }) {
     .reduce((sum, holding) => sum + holding.totalCostCents, 0);
   const portfolioValueCents = remainingPurchaseCostCents + cash.balanceCents;
   const realizedBySymbol = calculateProfitBySymbol(transactions);
+  const sellDetailsBySymbol = new Map();
+  for (const detail of calculateSellDetails(transactions)) {
+    const details = sellDetailsBySymbol.get(detail.symbol) ?? [];
+    details.push(detail);
+    sellDetailsBySymbol.set(detail.symbol, details);
+  }
   const totalProfitCents = calculateTotalProfit(transactions);
 
   return (
@@ -117,6 +125,7 @@ export default function SummaryPage({ transactionRevision = 0 }) {
               <table className="transactions-table summary-table">
                 <thead>
                   <tr>
+                    <th scope="col"><span className="visually-hidden">Išskleisti</span></th>
                     <th scope="col">Akcija</th>
                     <th scope="col">Parduotas kiekis</th>
                     <th scope="col">Įplaukos</th>
@@ -125,17 +134,91 @@ export default function SummaryPage({ transactionRevision = 0 }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {realizedBySymbol.map((row) => (
-                    <tr key={row.symbol}>
-                      <td className="symbol-cell">{row.symbol}</td>
-                      <td>{row.soldQuantity}</td>
-                      <td>{formatCents(row.proceedsCents)}</td>
-                      <td>{formatCents(row.costCents)}</td>
-                      <td className={row.profitCents > 0 ? 'profit-positive' : row.profitCents < 0 ? 'profit-negative' : ''}>
-                        {formatCents(row.profitCents)}
-                      </td>
-                    </tr>
-                  ))}
+                  {realizedBySymbol.map((row) => {
+                    const expanded = expandedSymbols.has(row.symbol);
+                    const saleDetails = sellDetailsBySymbol.get(row.symbol) ?? [];
+                    return (
+                      <Fragment key={row.symbol}>
+                        <tr>
+                          <td>
+                            <button
+                              className="expand-button"
+                              type="button"
+                              aria-expanded={expanded}
+                              aria-label={`${expanded ? 'Suskleisti' : 'Išskleisti'} ${row.symbol} pardavimus`}
+                              onClick={() => setExpandedSymbols((current) => {
+                                const next = new Set(current);
+                                if (next.has(row.symbol)) next.delete(row.symbol);
+                                else next.add(row.symbol);
+                                return next;
+                              })}
+                            >
+                              {expanded ? '−' : '+'}
+                            </button>
+                          </td>
+                          <td className="symbol-cell">{row.symbol}</td>
+                          <td>{row.soldQuantity}</td>
+                          <td>{formatCents(row.proceedsCents)}</td>
+                          <td>{formatCents(row.costCents)}</td>
+                          <td className={row.profitCents > 0 ? 'profit-positive' : row.profitCents < 0 ? 'profit-negative' : ''}>
+                            {formatCents(row.profitCents)}
+                          </td>
+                        </tr>
+                        {expanded && (
+                          <tr className="detail-row">
+                            <td colSpan="6">
+                              <p className="detail-note">
+                                Pirkimų sandoriai, sudarę svertinį vidurkį iki kiekvieno pardavimo. Pirkimai nepriskiriami konkrečiam pardavimui.
+                              </p>
+                              <div className="table-scroll">
+                                <table className="sale-detail-table">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">Sandoris</th>
+                                      <th scope="col">Data</th>
+                                      <th scope="col">Kiekis</th>
+                                      <th scope="col">Kaina už akciją</th>
+                                      <th scope="col">Pirkimo suma / įplaukos</th>
+                                      <th scope="col">Pardavimo savikaina</th>
+                                      <th scope="col">Pelnas</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {saleDetails.map((sale) => (
+                                      <Fragment key={`sale-${sale.transactionId}`}>
+                                        {sale.purchaseTransactions.map((purchase) => (
+                                          <tr key={`buy-${purchase.transactionId}`}>
+                                            <td><span className="detail-kind detail-buy">Pirkimas</span></td>
+                                            <td>{purchase.date}</td>
+                                            <td>{purchase.quantity}</td>
+                                            <td>{formatCents(purchase.priceCents)}</td>
+                                            <td>{formatCents(purchase.amountCents)}</td>
+                                            <td>—</td>
+                                            <td>—</td>
+                                          </tr>
+                                        ))}
+                                        <tr className="sale-detail-row">
+                                          <td><span className="detail-kind detail-sell">Pardavimas</span></td>
+                                          <td>{sale.date}</td>
+                                          <td>{sale.quantity}</td>
+                                          <td>{formatCents(sale.priceCents)}</td>
+                                          <td>{formatCents(sale.proceedsCents)}</td>
+                                          <td>{formatCents(sale.costCents)}</td>
+                                          <td className={sale.profitCents > 0 ? 'profit-positive' : sale.profitCents < 0 ? 'profit-negative' : ''}>
+                                            {formatCents(sale.profitCents)}
+                                          </td>
+                                        </tr>
+                                      </Fragment>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </Fragment>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
