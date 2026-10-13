@@ -1,4 +1,4 @@
-# Investicijų portfelis
+# Mano portfelis
 
 Vieno vartotojo investicijų portfelio programa, kurioje galima tvarkyti įnašus, akcijų pirkimus ir pardavimus. Sąsaja sukurta React ir Vite, o duomenys pasiekiami per Supabase.
 
@@ -27,7 +27,7 @@ Paleiskite kūrimo aplinką:
 npm run dev
 ```
 
-Sandorių puslapyje galima įrašyti įnašus, pirkimus ir pardavimus, peržiūrėti istoriją bei redaguoti arba ištrinti esamus įrašus. Prieš įrašymą tikrinama įvestis, pinigų likutis ir turimas akcijų kiekis. Suvestinės puslapyje pateikiami pinigų srautai ir realizuotas pelnas pagal akciją bei visam portfeliui.
+Atidarius programą pirmiausia rodoma suvestinė su pinigų srautais ir realizuotu pelnu pagal akciją bei visam portfeliui. „Sandoriai“ puslapyje galima įrašyti įnašus, pirkimus ir pardavimus, peržiūrėti istoriją bei redaguoti arba ištrinti esamus įrašus. Prieš įrašymą tikrinama įvestis, pinigų likutis ir turimas akcijų kiekis.
 
 ## Komandos
 

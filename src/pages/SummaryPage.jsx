@@ -61,7 +61,7 @@ export default function SummaryPage({ transactionRevision = 0 }) {
         <header className="page-header">
           <div>
             <p className="eyebrow">Portfelio apžvalga</p>
-            <h1>Suvestinė</h1>
+            <h1>Mano portfelis</h1>
             <p className="page-lede">Pinigų srautai ir parduotų pozicijų rezultatai.</p>
           </div>
           <span className="portfolio-mark" aria-hidden="true">↗</span>

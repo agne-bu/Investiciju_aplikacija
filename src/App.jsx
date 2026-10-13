@@ -3,7 +3,7 @@ import TransactionsPage from './pages/TransactionsPage.jsx';
 import SummaryPage from './pages/SummaryPage.jsx';
 
 export default function App() {
-  const [activePage, setActivePage] = useState('transactions');
+  const [activePage, setActivePage] = useState('summary');
   const [transactionRevision, setTransactionRevision] = useState(0);
 
   return (
