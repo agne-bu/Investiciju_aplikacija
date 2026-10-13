@@ -1,4 +1,4 @@
 # Puslapiai
 
 - `TransactionsPage.jsx` su antrašte „Sandoriai“ įkelia sandorius iš API, rodo įkėlimo ir klaidos būsenas, pateikia kūrimo / redagavimo formą ir atnaujina sąrašą po pakeitimų. Prieš trynimą puslapis patikrina viso portfelio pasekmes ir paprašo naudotojo patvirtinimo.
-- `SummaryPage.jsx` yra pradinis puslapis. Jis įkelia sandorius ir pateikia pinigų srautų, realizuoto pelno pagal akciją bei viso portfelio realizuoto pelno suvestinę. Atnaujina duomenis, kai pasikeičia sandorių versija programos būsenoje.
+- `SummaryPage.jsx` yra pradinis puslapis. Jis įkelia sandorius ir pateikia įnašus, portfelio vertę (neparduotų akcijų savikaina ir pinigų likutis), bendrą realizuotą pelną, neparduotų akcijų savikainą, komisinius bei pinigų likutį. Realizuoto pelno lentelėje rodomos tik akcijos, kurioms yra pardavimo sandorių. Realizuoto pelno laukas rodomas iškart po įnešto kapitalo ir portfelio vertės. Neparduotų akcijų savikaina apskaičiuojama svertiniu vidurkiu, atėmus parduotų dalių savikainą. Duomenys atnaujinami pasikeitus sandoriams.

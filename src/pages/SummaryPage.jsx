@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { listTransactions } from '../api/transactions.js';
 import {
   calculateCashSummary,
+  calculateHoldings,
   calculateProfitBySymbol,
   calculateTotalProfit,
 } from '../services/profit/profit.js';
@@ -50,9 +51,10 @@ export default function SummaryPage({ transactionRevision = 0 }) {
   }
 
   const cash = calculateCashSummary(transactions);
+  const remainingPurchaseCostCents = calculateHoldings(transactions)
+    .reduce((sum, holding) => sum + holding.totalCostCents, 0);
+  const portfolioValueCents = remainingPurchaseCostCents + cash.balanceCents;
   const realizedBySymbol = calculateProfitBySymbol(transactions);
-  const realizedBySymbolMap = new Map(realizedBySymbol.map((row) => [row.symbol, row]));
-  const symbols = [...new Set(transactions.filter((row) => row.type === 'buy' || row.type === 'sell').map((row) => row.symbol))].sort();
   const totalProfitCents = calculateTotalProfit(transactions);
 
   return (
@@ -72,13 +74,24 @@ export default function SummaryPage({ transactionRevision = 0 }) {
             <span>Įneštas kapitalas</span>
             <strong>{formatCents(cash.depositsCents)}</strong>
           </article>
-          <article className="summary-card">
-            <span>Bendra pirkimų suma</span>
-            <strong>{formatCents(cash.buysCents)}</strong>
+          <article className="summary-card summary-card-highlight">
+            <span>Portfelio vertė</span>
+            <strong>{formatCents(portfolioValueCents)}</strong>
           </article>
+          <section className="summary-profit-hero" aria-labelledby="total-profit-heading">
+            <div>
+              <p className="eyebrow">Realizuotas rezultatas</p>
+              <h2 id="total-profit-heading">Bendras portfelio pelnas</h2>
+              <p>Tai realizuotas pelnas. Neparduotų akcijų vertė neįskaičiuota.</p>
+            </div>
+            <strong className={totalProfitCents > 0 ? 'profit-positive' : totalProfitCents < 0 ? 'profit-negative' : ''}>
+              {formatCents(totalProfitCents)}
+            </strong>
+          </section>
           <article className="summary-card">
-            <span>Pardavimų įplaukos</span>
-            <strong>{formatCents(cash.sellProceedsCents)}</strong>
+            <span>Bendra pirkimų vertė</span>
+            <strong>{formatCents(remainingPurchaseCostCents)}</strong>
+            <small>Tik dar turimos akcijos</small>
           </article>
           <article className="summary-card">
             <span>Sumokėti komisiniai</span>
@@ -90,17 +103,6 @@ export default function SummaryPage({ transactionRevision = 0 }) {
           </article>
         </section>
 
-        <section className="summary-profit-hero" aria-labelledby="total-profit-heading">
-          <div>
-            <p className="eyebrow">Realizuotas rezultatas</p>
-            <h2 id="total-profit-heading">Bendras portfelio pelnas</h2>
-            <p>Tai realizuotas pelnas. Neparduotų akcijų vertė neįskaičiuota.</p>
-          </div>
-          <strong className={totalProfitCents > 0 ? 'profit-positive' : totalProfitCents < 0 ? 'profit-negative' : ''}>
-            {formatCents(totalProfitCents)}
-          </strong>
-        </section>
-
         <section className="panel summary-table-panel" aria-labelledby="symbol-profit-heading">
           <div className="list-heading">
             <div>
@@ -108,8 +110,8 @@ export default function SummaryPage({ transactionRevision = 0 }) {
               <h2 id="symbol-profit-heading">Realizuotas pelnas pagal akciją</h2>
             </div>
           </div>
-          {symbols.length === 0 ? (
-            <div className="empty-state">Akcijų sandorių dar nėra</div>
+          {realizedBySymbol.length === 0 ? (
+            <div className="empty-state">Parduotų akcijų dar nėra</div>
           ) : (
             <div className="table-scroll">
               <table className="transactions-table summary-table">
@@ -123,20 +125,17 @@ export default function SummaryPage({ transactionRevision = 0 }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {symbols.map((symbol) => {
-                    const row = realizedBySymbolMap.get(symbol);
-                    return (
-                      <tr key={symbol}>
-                        <td className="symbol-cell">{symbol}</td>
-                        <td>{row?.soldQuantity ?? 0}</td>
-                        <td>{formatCents(row?.proceedsCents ?? 0)}</td>
-                        <td>{formatCents(row?.costCents ?? 0)}</td>
-                        <td className={row?.profitCents > 0 ? 'profit-positive' : row?.profitCents < 0 ? 'profit-negative' : ''}>
-                          {formatCents(row?.profitCents ?? 0)}{!row && <span className="unrealized-label">Neparduota</span>}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {realizedBySymbol.map((row) => (
+                    <tr key={row.symbol}>
+                      <td className="symbol-cell">{row.symbol}</td>
+                      <td>{row.soldQuantity}</td>
+                      <td>{formatCents(row.proceedsCents)}</td>
+                      <td>{formatCents(row.costCents)}</td>
+                      <td className={row.profitCents > 0 ? 'profit-positive' : row.profitCents < 0 ? 'profit-negative' : ''}>
+                        {formatCents(row.profitCents)}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

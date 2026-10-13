@@ -27,7 +27,7 @@ Paleiskite kūrimo aplinką:
 npm run dev
 ```
 
-Atidarius programą pirmiausia rodoma suvestinė su pinigų srautais ir realizuotu pelnu pagal akciją bei visam portfeliui. „Sandoriai“ puslapyje galima įrašyti įnašus, pirkimus ir pardavimus, peržiūrėti istoriją bei redaguoti arba ištrinti esamus įrašus. Prieš įrašymą tikrinama įvestis, pinigų likutis ir turimas akcijų kiekis.
+Atidarius programą pirmiausia rodoma suvestinė su įnašais, portfelio verte (neparduotų akcijų savikaina ir pinigų likutis), komisiniais bei realizuotu pelnu. „Sandoriai“ puslapyje galima įrašyti įnašus, pirkimus ir pardavimus, peržiūrėti istoriją bei redaguoti arba ištrinti esamus įrašus. Prieš įrašymą tikrinama įvestis, pinigų likutis ir turimas akcijų kiekis.
 
 ## Komandos
 
