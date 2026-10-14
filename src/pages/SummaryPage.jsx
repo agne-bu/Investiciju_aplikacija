@@ -168,7 +168,7 @@ export default function SummaryPage({ transactionRevision = 0 }) {
                           <tr className="detail-row">
                             <td colSpan="6">
                               <p className="detail-note">
-                                Pirkimų sandoriai, sudarę svertinį vidurkį iki kiekvieno pardavimo. Pirkimai nepriskiriami konkrečiam pardavimui.
+                                Pirkimai, kuriems pagal FIFO priskirta šio pardavimo savikaina, rodomi chronologine tvarka.
                               </p>
                               <div className="table-scroll">
                                 <table className="sale-detail-table">
@@ -178,7 +178,7 @@ export default function SummaryPage({ transactionRevision = 0 }) {
                                       <th scope="col">Data</th>
                                       <th scope="col">Kiekis</th>
                                       <th scope="col">Kaina už akciją</th>
-                                      <th scope="col">Pirkimo suma / įplaukos</th>
+                                      <th scope="col">Pirkimo dalies savikaina / įplaukos</th>
                                       <th scope="col">Pardavimo savikaina</th>
                                       <th scope="col">Pelnas</th>
                                     </tr>
@@ -186,13 +186,13 @@ export default function SummaryPage({ transactionRevision = 0 }) {
                                   <tbody>
                                     {saleDetails.map((sale) => (
                                       <Fragment key={`sale-${sale.transactionId}`}>
-                                        {sale.purchaseTransactions.map((purchase) => (
+                                        {sale.purchaseAllocations.map((purchase) => (
                                           <tr key={`buy-${purchase.transactionId}`}>
                                             <td><span className="detail-kind detail-buy">Pirkimas</span></td>
                                             <td>{purchase.date}</td>
                                             <td>{purchase.quantity}</td>
                                             <td>{formatCents(purchase.priceCents)}</td>
-                                            <td>{formatCents(purchase.amountCents)}</td>
+                                            <td>{formatCents(purchase.costCents)}</td>
                                             <td>—</td>
                                             <td>—</td>
                                           </tr>
@@ -224,7 +224,7 @@ export default function SummaryPage({ transactionRevision = 0 }) {
             </div>
           )}
         </section>
-        <footer className="page-footer">Pelnas apskaičiuojamas svertinio vidurkio metodu.</footer>
+        <footer className="page-footer">Pardavimo savikaina apskaičiuojama FIFO metodu.</footer>
       </div>
     </main>
   );

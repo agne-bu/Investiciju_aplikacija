@@ -20,7 +20,7 @@ const deposit = (id, date, amountCents) => ({
   feeCents: 0, amountCents,
 });
 
-describe('profit calculations using weighted average cost', () => {
+describe('profit calculations using FIFO cost', () => {
   it('calculates the requested buy and sell example', () => {
     const transactions = [
       buy(1, '2026-01-01', 'ABC', 10, 10_000, 500),
@@ -41,14 +41,14 @@ describe('profit calculations using weighted average cost', () => {
     expect(calculateHoldings(transactions)).toEqual([{ symbol: 'ABC', quantity: 5, totalCostCents: 5002 }]);
   });
 
-  it('uses weighted average cost across purchases at different prices', () => {
+  it('uses the oldest purchase cost first across purchases at different prices', () => {
     const transactions = [
       buy(1, '2026-01-01', 'ABC', 2, 1_000),
       buy(2, '2026-01-02', 'ABC', 3, 2_000),
       sell(3, '2026-01-03', 'ABC', 2, 2_500),
     ];
-    expect(calculateSellProfits(transactions)[0].costCents).toBe(3_200);
-    expect(calculateHoldings(transactions)[0]).toEqual({ symbol: 'ABC', quantity: 3, totalCostCents: 4_800 });
+    expect(calculateSellProfits(transactions)[0].costCents).toBe(2_000);
+    expect(calculateHoldings(transactions)[0]).toEqual({ symbol: 'ABC', quantity: 3, totalCostCents: 6_000 });
   });
 
   it('reports a loss as a negative profit', () => {

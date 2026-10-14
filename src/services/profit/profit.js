@@ -55,17 +55,18 @@ const compute = (transactions) => {
       throw new RangeError('Trade quantity and price must be positive, and fee non-negative');
     }
 
-    const position = holdings.get(symbol) ?? { quantity: 0n, totalCostCents: 0n, purchases: [] };
+    const position = holdings.get(symbol) ?? { quantity: 0n, totalCostCents: 0n, lots: [] };
     if (transaction.type === 'buy') {
       position.quantity += quantity;
-      position.totalCostCents += quantity * price + fee;
-      position.purchases.push({
+      const purchaseCost = quantity * price + fee;
+      position.totalCostCents += purchaseCost;
+      position.lots.push({
         transactionId: transaction.id,
         date: transaction.date,
-        quantity: asSafeNumber(quantity, 'quantity'),
+        quantity,
+        totalCostCents: purchaseCost,
         priceCents: asSafeNumber(price, 'priceCents'),
         feeCents: asSafeNumber(fee, 'feeCents'),
-        amountCents: asSafeNumber(quantity * price + fee, 'amountCents'),
       });
       holdings.set(symbol, position);
       continue;
@@ -74,7 +75,28 @@ const compute = (transactions) => {
     if (quantity > position.quantity) {
       throw new RangeError(`Cannot sell more ${symbol} than currently held`);
     }
-    const cost = roundedDivide(position.totalCostCents * quantity, position.quantity);
+    let remainingToSell = quantity;
+    let cost = 0n;
+    const purchaseAllocations = [];
+    while (remainingToSell > 0n) {
+      const lot = position.lots[0];
+      const allocatedQuantity = remainingToSell < lot.quantity ? remainingToSell : lot.quantity;
+      const allocatedCost = allocatedQuantity === lot.quantity
+        ? lot.totalCostCents
+        : roundedDivide(lot.totalCostCents * allocatedQuantity, lot.quantity);
+      purchaseAllocations.push({
+        transactionId: lot.transactionId,
+        date: lot.date,
+        quantity: asSafeNumber(allocatedQuantity, 'quantity'),
+        priceCents: lot.priceCents,
+        costCents: asSafeNumber(allocatedCost, 'costCents'),
+      });
+      lot.quantity -= allocatedQuantity;
+      lot.totalCostCents -= allocatedCost;
+      remainingToSell -= allocatedQuantity;
+      cost += allocatedCost;
+      if (lot.quantity === 0n) position.lots.shift();
+    }
     const proceeds = quantity * price - fee;
     position.quantity -= quantity;
     position.totalCostCents -= cost;
@@ -89,12 +111,9 @@ const compute = (transactions) => {
       proceedsCents: asSafeNumber(proceeds, 'proceedsCents'),
       costCents: asSafeNumber(cost, 'costCents'),
       profitCents: asSafeNumber(proceeds - cost, 'profitCents'),
-      purchaseTransactions: position.purchases.map((purchase) => ({ ...purchase })),
+      purchaseAllocations,
     });
-    if (position.quantity === 0n) {
-      position.totalCostCents = 0n;
-      position.purchases = [];
-    }
+    if (position.quantity === 0n) position.totalCostCents = 0n;
     holdings.set(symbol, position);
   }
 
@@ -119,7 +138,7 @@ export const calculateSellDetails = (transactions) => compute(transactions).sale
   proceedsCents: sale.proceedsCents,
   costCents: sale.costCents,
   profitCents: sale.profitCents,
-  purchaseTransactions: sale.purchaseTransactions,
+  purchaseAllocations: sale.purchaseAllocations,
 }));
 
 export const calculateProfitBySymbol = (transactions) => {
