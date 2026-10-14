@@ -124,9 +124,9 @@ export default function SummaryPage({ transactionRevision = 0 }) {
                     <th scope="col"><span className="visually-hidden">Išskleisti</span></th>
                     <th scope="col">Akcija</th>
                     <th scope="col">Parduotas kiekis</th>
-                    <th scope="col">Įplaukos</th>
+                    <th scope="col">Pardavimas</th>
                     <th scope="col">Savikaina</th>
-                    <th scope="col">Pelnas</th>
+                    <th scope="col">Pelnas / Nuostolis (-)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -174,13 +174,13 @@ export default function SummaryPage({ transactionRevision = 0 }) {
                                       <th scope="col">Data</th>
                                       <th scope="col">Kiekis</th>
                                       <th scope="col">Kaina už akciją</th>
-                                      <th scope="col">Pirkimo dalies savikaina / įplaukos</th>
+                                      <th scope="col">Pirkimo dalies savikaina / pardavimas</th>
                                       <th scope="col">Pardavimo savikaina</th>
-                                      <th scope="col">Pelnas</th>
+                                      <th scope="col">Pelnas / Nuostolis (-)</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {saleDetails.map((sale) => (
+                                    {[...saleDetails].reverse().map((sale) => (
                                       <Fragment key={`sale-${sale.transactionId}`}>
                                         {sale.purchaseAllocations.map((purchase) => (
                                           <tr key={`buy-${purchase.transactionId}`}>

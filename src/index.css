@@ -101,6 +101,7 @@ h2 { font-size: 1.25rem; }
 .summary-profit-hero > strong.profit-negative { color: #ffaaa4 !important; }
 .summary-table-panel { padding: 24px 0 0; overflow: hidden; }
 .summary-table-panel .list-heading { padding-bottom: 18px; }
+.summary-table th, .summary-table td { text-align: center; }
 .summary-table td:last-child { padding-right: 26px; }
 .expand-button { display: grid; width: 27px; height: 27px; place-items: center; border: 1px solid #dce8df; border-radius: 8px; background: #f5faf6; color: var(--green); font-size: 1.1rem; font-weight: 600; line-height: 1; }
 .expand-button:hover, .expand-button[aria-expanded='true'] { border-color: #9ec5aa; background: #e8f4eb; }
