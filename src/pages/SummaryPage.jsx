@@ -9,6 +9,18 @@ import {
 } from '../services/profit/profit.js';
 import { formatCents } from '../utils/money.js';
 
+const formatProfitPercent = (profitCents, investedCapitalCents) => {
+  if (investedCapitalCents === 0) return '—';
+  const profit = BigInt(profitCents);
+  const capital = BigInt(investedCapitalCents);
+  const negative = profit < 0n;
+  const numerator = (negative ? -profit : profit) * 10_000n;
+  const roundedHundredths = (numerator + capital / 2n) / capital;
+  const whole = (roundedHundredths / 100n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0');
+  const fraction = String(roundedHundredths % 100n).padStart(2, '0');
+  return `${negative ? '−' : ''}${whole},${fraction} %`;
+};
+
 export default function SummaryPage({ transactionRevision = 0 }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -92,14 +104,22 @@ export default function SummaryPage({ transactionRevision = 0 }) {
               <h2 id="total-profit-heading">Bendras portfelio pelnas</h2>
               <p>Tai realizuotas pelnas. Neparduotų akcijų vertė neįskaičiuota.</p>
             </div>
-            <strong className={totalProfitCents > 0 ? 'profit-positive' : totalProfitCents < 0 ? 'profit-negative' : ''}>
-              {formatCents(totalProfitCents)}
-            </strong>
+            <div className="summary-profit-value">
+              <strong className={totalProfitCents > 0 ? 'profit-positive' : totalProfitCents < 0 ? 'profit-negative' : ''}>
+                {formatCents(totalProfitCents)}
+              </strong>
+              <div className="summary-profit-percent-line">
+                <strong className={totalProfitCents > 0 ? 'profit-positive' : totalProfitCents < 0 ? 'profit-negative' : ''}>
+                  {formatProfitPercent(totalProfitCents, cash.depositsCents)}
+                </strong>
+                <span>nuo įnešto kapitalo</span>
+              </div>
+            </div>
           </section>
           <article className="summary-card">
             <span>Bendra pirkimų vertė</span>
             <strong>{formatCents(remainingPurchaseCostCents)}</strong>
-            <small>Tik dar turimos akcijos</small>
+            <small>Turimų akcijų įsigijimo vertė</small>
           </article>
           <article className="summary-card summary-card-highlight">
             <span>Dabartinis pinigų likutis</span>
