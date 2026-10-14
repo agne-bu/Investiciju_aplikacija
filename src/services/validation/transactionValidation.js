@@ -31,6 +31,11 @@ const todayIso = () => {
 
 const isPositiveInteger = (value) => Number.isSafeInteger(value) && value > 0;
 const isNonNegativeInteger = (value) => Number.isSafeInteger(value) && value >= 0;
+const transactionLabel = (transaction) => (
+  transaction?.id === 'zzzz-new-transaction' && transaction.symbol
+    ? transaction.symbol
+    : transaction?.id ?? ''
+);
 
 export function validateTransactionInput(input) {
   const errors = {};
@@ -84,7 +89,7 @@ export function validatePortfolio(transactions) {
     const inputResult = validateTransactionInput(transaction);
     if (!inputResult.valid) {
       for (const message of Object.values(inputResult.errors)) {
-        errors.push(`Sandoris ${transaction?.id ?? ''}: ${message}`.trim());
+        errors.push(`Sandoris ${transactionLabel(transaction)}: ${message}`.trim());
       }
       continue;
     }
@@ -121,7 +126,7 @@ export function validatePortfolio(transactions) {
     }
 
     if (cashBalance < 0) {
-      errors.push(`Sandoris ${transaction.id}: po sandorio pinigų likutis būtų neigiamas.`);
+      errors.push(`Sandoris ${transactionLabel(transaction)}: po sandorio pinigų likutis būtų neigiamas.`);
     }
 
     // Keep amountCents consistent with the supplied trade fields, including fees.
