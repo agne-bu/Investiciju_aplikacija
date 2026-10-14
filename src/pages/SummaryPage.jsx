@@ -101,10 +101,6 @@ export default function SummaryPage({ transactionRevision = 0 }) {
             <strong>{formatCents(remainingPurchaseCostCents)}</strong>
             <small>Tik dar turimos akcijos</small>
           </article>
-          <article className="summary-card">
-            <span>Sumokėti komisiniai</span>
-            <strong>{formatCents(cash.feesCents)}</strong>
-          </article>
           <article className="summary-card summary-card-highlight">
             <span>Dabartinis pinigų likutis</span>
             <strong>{formatCents(cash.balanceCents)}</strong>
