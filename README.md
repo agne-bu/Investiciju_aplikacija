@@ -27,7 +27,7 @@ Paleiskite kūrimo aplinką:
 npm run dev
 ```
 
-Atidarius programą pirmiausia rodoma suvestinė su įnašais, portfelio verte (neparduotų akcijų FIFO savikaina ir pinigų likutis), realizuotu pelnu procentais nuo įnešto kapitalo ir turimų akcijų įsigijimo verčių lentele. „Sandoriai“ puslapyje galima įrašyti įnašus, pirkimus ir pardavimus, peržiūrėti istoriją bei redaguoti arba ištrinti esamus įrašus. Prieš įrašymą tikrinama įvestis, pinigų likutis ir turimas akcijų kiekis.
+Atidarius programą pirmiausia rodoma suvestinė su įnašais, portfelio verte (neparduotų akcijų FIFO savikaina ir pinigų likutis), realizuotu pelnu procentais nuo įnešto kapitalo ir turimų akcijų įsigijimo verčių lentele. Kairėje esanti tamsiai žalia, fiksuota meniu juosta leidžia perjungti puslapius: „Suvestinė“ pateikta virš „Sandoriai“ ir meniu lieka matomas slenkant turinį. „Sandoriai“ puslapyje galima įrašyti įnašus, pirkimus ir pardavimus, peržiūrėti istoriją bei redaguoti arba ištrinti esamus įrašus. Prieš įrašymą tikrinama įvestis, pinigų likutis ir turimas akcijų kiekis.
 
 ## Komandos
 

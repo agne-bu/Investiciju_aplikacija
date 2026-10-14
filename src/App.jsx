@@ -10,20 +10,20 @@ export default function App() {
     <>
       <nav className="screen-switch" aria-label="Puslapiai">
         <button
-          className={activePage === 'transactions' ? 'is-active' : ''}
-          type="button"
-          aria-pressed={activePage === 'transactions'}
-          onClick={() => setActivePage('transactions')}
-        >
-          Sandoriai
-        </button>
-        <button
           className={activePage === 'summary' ? 'is-active' : ''}
           type="button"
           aria-pressed={activePage === 'summary'}
           onClick={() => setActivePage('summary')}
         >
           Suvestinė
+        </button>
+        <button
+          className={activePage === 'transactions' ? 'is-active' : ''}
+          type="button"
+          aria-pressed={activePage === 'transactions'}
+          onClick={() => setActivePage('transactions')}
+        >
+          Sandoriai
         </button>
       </nav>
       {activePage === 'transactions' ? (

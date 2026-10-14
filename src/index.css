@@ -20,11 +20,11 @@
 body { min-width: 320px; min-height: 100vh; margin: 0; }
 button, input, select { font: inherit; }
 button { cursor: pointer; }
-.screen-switch { display: flex; justify-content: center; gap: 5px; padding: 22px 20px 0; }
-.screen-switch button { min-width: 116px; padding: 9px 16px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: #73837c; font-size: 0.86rem; font-weight: 700; }
-.screen-switch button:hover { background: #e9efea; color: #355344; }
-.screen-switch button.is-active { border-color: #dce9df; background: #fff; color: var(--green); box-shadow: 0 3px 12px rgb(23 43 37 / 5%); }
-.app-shell { min-height: 100vh; padding: 48px 28px 36px; }
+.screen-switch { position: fixed; z-index: 5; inset: 0 auto 0 0; display: flex; width: 208px; flex-direction: column; gap: 6px; padding: 30px 16px; border-right: 1px solid #245342; background: #173d30; }
+.screen-switch button { width: 100%; padding: 11px 13px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: #d0e0d6; font-size: 0.86rem; font-weight: 700; text-align: left; }
+.screen-switch button:hover { background: #245342; color: #fff; }
+.screen-switch button.is-active { border-color: #527664; background: #2b5945; color: #fff; box-shadow: 0 3px 12px rgb(0 0 0 / 12%); }
+.app-shell { min-height: 100vh; margin-left: 208px; padding: 48px 28px 36px; }
 .page-container { width: min(1360px, 100%); margin: 0 auto; }
 .page-header { display: flex; align-items: center; justify-content: space-between; margin: 0 0 30px; }
 .eyebrow { margin: 0 0 9px; color: var(--green); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
@@ -138,7 +138,8 @@ h2 { font-size: 1.25rem; }
   .list-heading { padding-right: 22px; padding-left: 22px; }
 }
 @media (max-width: 760px) {
-  .app-shell { padding: 30px 18px; }
+  .screen-switch { width: 150px; padding: 24px 10px; }
+  .app-shell { margin-left: 150px; padding: 30px 18px; }
   .page-layout { grid-template-columns: 1fr; }
   .page-header { margin-bottom: 22px; }
   .portfolio-mark { width: 46px; height: 46px; border-radius: 15px; }
@@ -146,7 +147,9 @@ h2 { font-size: 1.25rem; }
   .summary-profit-hero { grid-column: span 2; align-items: flex-start; flex-direction: row; padding: 17px; }
 }
 @media (max-width: 440px) {
-  .app-shell { padding: 24px 12px; }
+  .screen-switch { width: 116px; padding: 18px 7px; }
+  .screen-switch button { padding: 10px 8px; font-size: 0.75rem; }
+  .app-shell { margin-left: 116px; padding: 24px 12px; }
   .form-panel { padding: 19px 16px; }
   .list-panel { padding-top: 19px; }
   .list-heading { padding-right: 16px; padding-left: 16px; }
