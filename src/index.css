@@ -105,9 +105,16 @@ h2 { font-size: 1.25rem; }
 .summary-profit-percent-line > strong.profit-negative { color: #ffaaa4 !important; }
 .summary-profit-percent-line > span { color: #c1d5ca; font-size: 0.68rem; white-space: nowrap; }
 .summary-table-panel { padding: 24px 0 0; overflow: hidden; }
+.holdings-table-panel { margin-top: 18px; }
 .summary-table-panel .list-heading { padding-bottom: 18px; }
 .summary-table th, .summary-table td { text-align: center; }
 .summary-table td:last-child { padding-right: 26px; }
+.holding-name-cell { white-space: normal !important; }
+.holding-name-cell strong, .holding-name-cell small { display: block; }
+.holding-name-cell strong { color: var(--ink); }
+.holding-name-cell small { margin-top: 3px; color: #87938c; font-size: 0.7rem; }
+.summary-table tfoot { background: #f6f9f6; }
+.summary-table tfoot th { border-top: 1px solid #dfe8df; color: var(--ink); font-size: 0.78rem; text-transform: none; }
 .expand-button { display: grid; width: 27px; height: 27px; place-items: center; border: 1px solid #dce8df; border-radius: 8px; background: #f5faf6; color: var(--green); font-size: 1.1rem; font-weight: 600; line-height: 1; }
 .expand-button:hover, .expand-button[aria-expanded='true'] { border-color: #9ec5aa; background: #e8f4eb; }
 .detail-row > td { padding: 0 !important; background: #f8faf8; }

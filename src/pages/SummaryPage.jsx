@@ -21,6 +21,12 @@ const formatProfitPercent = (profitCents, investedCapitalCents) => {
   return `${negative ? '−' : ''}${whole},${fraction} %`;
 };
 
+const averageCostPerShareCents = (totalCostCents, quantity) => {
+  const total = BigInt(totalCostCents);
+  const shares = BigInt(quantity);
+  return Number((total + shares / 2n) / shares);
+};
+
 export default function SummaryPage({ transactionRevision = 0 }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -65,10 +71,13 @@ export default function SummaryPage({ transactionRevision = 0 }) {
   }
 
   const cash = calculateCashSummary(transactions);
-  const remainingPurchaseCostCents = calculateHoldings(transactions)
-    .reduce((sum, holding) => sum + holding.totalCostCents, 0);
+  const holdings = calculateHoldings(transactions);
+  const remainingPurchaseCostCents = holdings.reduce((sum, holding) => sum + holding.totalCostCents, 0);
   const portfolioValueCents = remainingPurchaseCostCents + cash.balanceCents;
   const realizedBySymbol = calculateProfitBySymbol(transactions);
+  const stockNames = new Map(transactions
+    .filter((transaction) => transaction.symbol && transaction.stock?.name)
+    .map((transaction) => [transaction.symbol, transaction.stock.name]));
   const sellDetailsBySymbol = new Map();
   for (const detail of calculateSellDetails(transactions)) {
     const details = sellDetailsBySymbol.get(detail.symbol) ?? [];
@@ -83,7 +92,7 @@ export default function SummaryPage({ transactionRevision = 0 }) {
         <header className="page-header">
           <div>
             <p className="eyebrow">Portfelio apžvalga</p>
-            <h1>Mano portfelis</h1>
+            <h1>Mano investicijų portfelis</h1>
             <p className="page-lede">Pinigų srautai ir parduotų pozicijų rezultatai.</p>
           </div>
           <span className="portfolio-mark" aria-hidden="true">↗</span>
@@ -236,6 +245,50 @@ export default function SummaryPage({ transactionRevision = 0 }) {
                     );
                   })}
                 </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
+        <section className="panel summary-table-panel holdings-table-panel" aria-labelledby="holdings-heading">
+          <div className="list-heading">
+            <div>
+              <p className="eyebrow">Esamos pozicijos</p>
+              <h2 id="holdings-heading">Bendra pirkimų vertė pagal akcijas</h2>
+            </div>
+          </div>
+          {holdings.length === 0 ? (
+            <div className="empty-state">Neparduotų akcijų nėra</div>
+          ) : (
+            <div className="table-scroll">
+              <table className="transactions-table summary-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Pavadinimas</th>
+                    <th scope="col">Kiekis</th>
+                    <th scope="col">Vid. vnt. vertė</th>
+                    <th scope="col">Bendra įsigijimo kaina</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {holdings.map((holding) => (
+                    <tr key={holding.symbol}>
+                      <td className="holding-name-cell">
+                        <strong>{stockNames.get(holding.symbol) ?? holding.symbol}</strong>
+                        {stockNames.has(holding.symbol) && <small>{holding.symbol}</small>}
+                      </td>
+                      <td>{holding.quantity}</td>
+                      <td>{formatCents(averageCostPerShareCents(holding.totalCostCents, holding.quantity))}</td>
+                      <td className="amount-cell">{formatCents(holding.totalCostCents)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th scope="row" colSpan="3">Iš viso</th>
+                    <td className="amount-cell">{formatCents(remainingPurchaseCostCents)}</td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           )}
