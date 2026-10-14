@@ -21,7 +21,7 @@ const centsToInput = (cents) => {
 const valuesFromTransaction = (transaction) => ({
   type: transaction.type,
   date: transaction.date,
-  amount: transaction.type === 'deposit' ? centsToInput(transaction.amountCents) : '',
+  amount: transaction.type === 'deposit' || transaction.type === 'withdrawal' ? centsToInput(transaction.amountCents) : '',
   symbol: transaction.symbol ?? '',
   quantity: transaction.quantity == null ? '' : String(transaction.quantity),
   price: transaction.priceCents == null ? '' : centsToInput(transaction.priceCents),
@@ -30,7 +30,7 @@ const valuesFromTransaction = (transaction) => ({
 
 const buildTransaction = (values) => {
   const base = { date: values.date, type: values.type };
-  if (values.type === 'deposit') {
+  if (values.type === 'deposit' || values.type === 'withdrawal') {
     try {
       return { ...base, amountCents: eurosToCents(values.amount) };
     } catch (error) {
@@ -154,6 +154,7 @@ export default function TransactionForm({ transactions, editingTransaction, onSa
         <span>Sandorio tipas</span>
         <select id="transaction-type" value={values.type} onChange={(event) => updateField('type', event.target.value)}>
           <option value="deposit">Įnašas</option>
+          <option value="withdrawal">Išmokėtos lėšos</option>
           <option value="buy">Pirkimas</option>
           <option value="sell">Pardavimas</option>
         </select>
@@ -161,7 +162,7 @@ export default function TransactionForm({ transactions, editingTransaction, onSa
       </label>
       <div className="form-grid">
         {field('date', 'Data', { type: 'date', errorKey: 'date' })}
-        {values.type === 'deposit' ? (
+        {values.type === 'deposit' || values.type === 'withdrawal' ? (
           field('amount', 'Suma (€)', { inputMode: 'decimal', errorKey: 'amountCents' })
         ) : (
           <>

@@ -46,9 +46,10 @@ const asSafeNumber = (value) => {
 };
 
 function prepareTransaction(input, stockId) {
-  if (input.type === 'deposit') {
-    const amountCents = requireSafeInteger(input.amountCents, 'Įnašo suma');
-    if (amountCents <= 0n) throw new Error('Įnašo suma turi būti didesnė už nulį.');
+  if (input.type === 'deposit' || input.type === 'withdrawal') {
+    const label = input.type === 'deposit' ? 'Įnašo' : 'Išmokėta';
+    const amountCents = requireSafeInteger(input.amountCents, `${label} suma`);
+    if (amountCents <= 0n) throw new Error(`${label} suma turi būti didesnė už nulį.`);
     return mapTransactionToDb({ ...input, amountCents: asSafeNumber(amountCents), stockId: null });
   }
   if (input.type !== 'buy' && input.type !== 'sell') throw new Error('Nežinomas sandorio tipas.');
@@ -71,7 +72,7 @@ function prepareTransaction(input, stockId) {
 }
 
 const stockIdFor = async (input) => {
-  if (input.type === 'deposit') return null;
+  if (input.type === 'deposit' || input.type === 'withdrawal') return null;
   return getOrCreateStock(input.symbol);
 };
 

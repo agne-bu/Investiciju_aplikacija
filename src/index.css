@@ -77,6 +77,7 @@ h2 { font-size: 1.25rem; }
 .unrealized-label { display: block; margin-top: 3px; color: #89968e; font-size: 0.68rem; font-weight: 500; }
 .type-badge { display: inline-flex; padding: 5px 8px; border-radius: 6px; background: #f1f3f2; color: #586860; font-size: 0.71rem; font-weight: 700; }
 .type-deposit { background: #e8f4ed; color: #26724f; }
+.type-withdrawal { background: #f8ece8; color: #9b5544; }
 .type-buy { background: #edf2fa; color: #486897; }
 .type-sell { background: #fbefea; color: #a65b3e; }
 .row-actions { display: flex; align-items: center; gap: 10px; }

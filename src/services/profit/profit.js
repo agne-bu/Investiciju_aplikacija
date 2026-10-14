@@ -39,7 +39,7 @@ const compute = (transactions) => {
   const sales = [];
 
   for (const transaction of chronological(transactions)) {
-    if (transaction.type === 'deposit') continue;
+    if (transaction.type === 'deposit' || transaction.type === 'withdrawal') continue;
     if (transaction.type !== 'buy' && transaction.type !== 'sell') {
       throw new TypeError(`Unknown transaction type: ${transaction.type}`);
     }
@@ -168,12 +168,14 @@ export const calculateTotalProfit = (transactions) =>
 
 export const calculateCashSummary = (transactions) => {
   let deposits = 0n;
+  let withdrawals = 0n;
   let buys = 0n;
   let sellProceeds = 0n;
   let fees = 0n;
   for (const transaction of transactions) {
     const amount = integer(transaction.amountCents, 'amountCents');
     if (transaction.type === 'deposit') deposits += amount;
+    if (transaction.type === 'withdrawal') withdrawals += amount;
     if (transaction.type === 'buy') buys += amount;
     if (transaction.type === 'sell') sellProceeds += amount;
     if (transaction.type === 'buy' || transaction.type === 'sell') {
@@ -181,11 +183,11 @@ export const calculateCashSummary = (transactions) => {
     }
   }
   return {
-    depositsCents: asSafeNumber(deposits, 'depositsCents'),
+    depositsCents: asSafeNumber(deposits - withdrawals, 'depositsCents'),
     buysCents: asSafeNumber(buys, 'buysCents'),
     sellProceedsCents: asSafeNumber(sellProceeds, 'sellProceedsCents'),
     feesCents: asSafeNumber(fees, 'feesCents'),
-    balanceCents: asSafeNumber(deposits - buys + sellProceeds, 'balanceCents'),
+    balanceCents: asSafeNumber(deposits - withdrawals - buys + sellProceeds, 'balanceCents'),
   };
 };
 

@@ -8,7 +8,7 @@ Sandoriai apdorojami pagal datą ir tada pagal ID. Realizuoto pelno savikaina sk
 - `calculateSellDetails` – pardavimo rezultatas ir FIFO pirkimo partijų dalys, priskirtos tam pardavimui.
 - `calculateProfitBySymbol` – parduotas kiekis ir realizuotos sumos pagal simbolį.
 - `calculateTotalProfit` – bendras realizuotas pelnas.
-- `calculateCashSummary` – įnašai, pirkimai, grynosios pardavimo įplaukos, komisiniai ir pinigų likutis.
+- `calculateCashSummary` – įnašai atėmus išmokėtas lėšas, pirkimai, grynosios pardavimo įplaukos, komisiniai ir pinigų likutis. Išmokėjimai taip pat mažina pinigų likutį.
 - `calculateHoldings` – likusios pozicijos ir jų savikaina.
 
 Testai taip pat tikrina, kad bendras realizuotas pelnas sutaptų su pelnų pagal akciją suma.

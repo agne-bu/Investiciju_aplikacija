@@ -55,6 +55,10 @@ export function validateTransactionInput(input) {
     if (!isPositiveInteger(input.amountCents)) {
       errors.amountCents = 'Įnašo suma turi būti sveikas centų skaičius, didesnis už nulį.';
     }
+  } else if (input.type === 'withdrawal') {
+    if (!isPositiveInteger(input.amountCents)) {
+      errors.amountCents = 'Išmokėta suma turi būti sveikas centų skaičius, didesnis už nulį.';
+    }
   } else if (input.type === 'buy' || input.type === 'sell') {
     if (typeof input.symbol !== 'string' || input.symbol.trim() === '') {
       errors.symbol = 'Akcijos simbolis privalomas.';
@@ -70,7 +74,7 @@ export function validateTransactionInput(input) {
       errors.feeCents = 'Komisinis turi būti neneigiamas sveikas centų skaičius.';
     }
   } else {
-    errors.type = 'Sandorio tipas turi būti įnašas, pirkimas arba pardavimas.';
+    errors.type = 'Sandorio tipas turi būti įnašas, išmokėtos lėšos, pirkimas arba pardavimas.';
   }
 
   return { valid: Object.keys(errors).length === 0, errors };
@@ -98,6 +102,14 @@ export function validatePortfolio(transactions) {
     const feeCents = transaction.feeCents ?? 0;
     if (type === 'deposit') {
       cashBalance += amountCents;
+      continue;
+    }
+
+    if (type === 'withdrawal') {
+      cashBalance -= amountCents;
+      if (cashBalance < 0) {
+        errors.push(`Sandoris ${transactionLabel(transaction)}: po išmokėjimo pinigų likutis būtų neigiamas.`);
+      }
       continue;
     }
 

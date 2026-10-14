@@ -8,7 +8,7 @@ Naudojamas FIFO metodas: parduodant pirmiausia nurašomos seniausio pirkimo akci
 
 ## Pinigų saugojimas
 
-Visos piniginės sumos skaičiavimo moduliuose saugomos sveikaisiais skaičiais, išreikštais euro centais. Skaičiavimuose nenaudojami slankiojo kablelio pinigų dydžiai. Sandorio `amountCents` pirkimui apima komisinį, o pardavimui jau yra atėmus komisinį.
+Visos piniginės sumos skaičiavimo moduliuose saugomos sveikaisiais skaičiais, išreikštais euro centais. Skaičiavimuose nenaudojami slankiojo kablelio pinigų dydžiai. Sandorio `amountCents` įnašui ir išmokėjimui yra teigiama operacijos suma; pirkimui apima komisinį, o pardavimui jau yra atėmus komisinį. Išmokėjimas mažina pinigų likutį ir įneštą kapitalą. Jis leidžiamas tik tada, kai pinigų likučio pakanka.
 
 ## Apvalinimas
 

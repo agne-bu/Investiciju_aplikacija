@@ -65,7 +65,7 @@ export default function TransactionsPage({ onTransactionsChanged }) {
           <div>
             <p className="eyebrow">Asmeninių investicijų apskaita</p>
             <h1>Sandoriai</h1>
-            <p className="page-lede">Tvarkykite įnašus, pirkimus ir pardavimus vienoje vietoje.</p>
+            <p className="page-lede">Tvarkykite įnašus, išmokėtas lėšas, pirkimus ir pardavimus vienoje vietoje.</p>
           </div>
           <span className="portfolio-mark" aria-hidden="true">€</span>
         </header>

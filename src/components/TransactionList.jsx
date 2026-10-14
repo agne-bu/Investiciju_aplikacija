@@ -8,7 +8,7 @@ const compareIds = (left, right) => {
   return a < b ? -1 : a > b ? 1 : 0;
 };
 
-const typeLabels = { deposit: 'Įnašas', buy: 'Pirkimas', sell: 'Pardavimas' };
+const typeLabels = { deposit: 'Įnašas', withdrawal: 'Išmokėtos lėšos', buy: 'Pirkimas', sell: 'Pardavimas' };
 
 export default function TransactionList({ transactions, onEdit, onDelete, deletingId }) {
   const profitByTransaction = new Map(

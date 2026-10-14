@@ -1,6 +1,6 @@
 # Mano investicijų portfelis
 
-Vieno vartotojo investicijų portfelio programa, kurioje galima tvarkyti įnašus, akcijų pirkimus ir pardavimus. Sąsaja sukurta React ir Vite, o duomenys pasiekiami per Supabase.
+Vieno vartotojo investicijų portfelio programa, kurioje galima tvarkyti įnašus, išmokėtas lėšas, akcijų pirkimus ir pardavimus. Sąsaja sukurta React ir Vite, o duomenys pasiekiami per Supabase.
 
 ## Reikalavimai
 
@@ -27,7 +27,9 @@ Paleiskite kūrimo aplinką:
 npm run dev
 ```
 
-Atidarius programą pirmiausia rodoma suvestinė su įnašais, portfelio verte (neparduotų akcijų FIFO savikaina ir pinigų likutis), realizuotu pelnu procentais nuo įnešto kapitalo ir turimų akcijų įsigijimo verčių lentele. Kairėje esanti tamsiai žalia, fiksuota meniu juosta leidžia perjungti puslapius: „Suvestinė“ pateikta virš „Sandoriai“ ir meniu lieka matomas slenkant turinį. „Sandoriai“ puslapyje galima įrašyti įnašus, pirkimus ir pardavimus, peržiūrėti istoriją bei redaguoti arba ištrinti esamus įrašus. Prieš įrašymą tikrinama įvestis, pinigų likutis ir turimas akcijų kiekis.
+Atidarius programą pirmiausia rodoma suvestinė su įneštu kapitalu, portfelio verte (neparduotų akcijų FIFO savikaina ir pinigų likutis), realizuotu pelnu procentais nuo įnešto kapitalo ir turimų akcijų įsigijimo verčių lentele. Kairėje esanti tamsiai žalia, fiksuota meniu juosta leidžia perjungti puslapius: „Suvestinė“ pateikta virš „Sandoriai“ ir meniu lieka matomas slenkant turinį. Sandorių puslapyje galima įrašyti bei tvarkyti įnašus, išmokėtas lėšas, pirkimus ir pardavimus. Išmokėtos lėšos mažina įneštą kapitalą ir pinigų likutį; suma negali viršyti turimo pinigų likučio.
+
+Esamai Supabase duomenų bazei pritaikykite `supabase/migrations/003_withdrawals.sql` migraciją, kad būtų leidžiamas naujas `withdrawal` sandorio tipas.
 
 ## Komandos
 

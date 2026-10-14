@@ -1,8 +1,8 @@
--- Transactions table: deposits, buys and sells.
+-- Transactions table: deposits, withdrawals, buys and sells.
 -- All money values are stored as integer cents (no floats).
 create table public.transactions (
   id           bigint generated always as identity primary key,
-  type         text    not null check (type in ('deposit', 'buy', 'sell')),
+  type         text    not null check (type in ('deposit', 'withdrawal', 'buy', 'sell')),
   date         date    not null,
   symbol       text,
   quantity     integer,
@@ -11,9 +11,9 @@ create table public.transactions (
   amount_cents bigint  not null,
   created_at   timestamptz not null default now(),
 
-  -- Deposit: only date and amount, no stock fields, no fee.
+  -- Deposit / withdrawal: only date and amount, no stock fields, no fee.
   constraint deposit_fields check (
-    type <> 'deposit' or (
+    type not in ('deposit', 'withdrawal') or (
       symbol is null
       and quantity is null
       and price_cents is null
